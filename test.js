@@ -1,7 +1,11 @@
-const { exec } = require("child_process");
+//const { exec } = require("child_process");
 const prompt = require('prompt-sync')();
 
 var https = require('https');
+const fs = require("fs"); // Or `import fs from "fs";` with ESM
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
 
 // exec("ls -la", (error, stdout, stderr) => {
 //     if (error) {
@@ -36,12 +40,41 @@ function askCommitNumber(){
   return nbCommits;
 }
 
+function askRepo(){
+  var repo = prompt('Enter the git you want to add commits to : ');
+  return repo;
+}
+
 async function responseCode() {
   url='https://www.google.fr';
   var x = await connectionCode(url);
   console.log(x);
   if(x == 200){
-    askCommitNumber();
+    nbCommits = askCommitNumber();
+    var repo = prompt('Enter the git you want to add commits to : ');
+    // var mail = prompt('Enter your github mail : ');
+    // var name = prompt('Enter your github username : ');
+    var codeRepo = await connectionCode(repo);
+    if(codeRepo == 200){
+      console.log("le repo est bon");
+      if (fs.existsSync("gitfolder")) {
+          console.log("folder found");
+          const { stdout, stderr } = await exec("cd gitfolder");
+          console.log('stdout:', stdout);
+          console.error('stderr:', stderr);
+      }
+      else{
+          console.log("Folder not found");
+          console.log("Creating folder");
+          const { stdout, stderr } = await exec("mkdir gitfolder");
+          console.log('stdout:', stdout);
+          console.error('stderr:', stderr);
+
+          [ stdout, stderr ] = await exec("cd gitfolder");
+          console.log('stdout:', stdout);
+          console.error('stderr:', stderr);
+      }
+    }
   }
 }
 responseCode();
