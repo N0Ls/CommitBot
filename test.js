@@ -28,7 +28,7 @@ function askRepo(){
   return repo;
 }
 
-async function responseCode() {
+async function commitBot() {
   /* Checking internet status */
   url='https://www.google.fr';
   var statusCodeTest = await connectionCode(url);
@@ -40,6 +40,11 @@ async function responseCode() {
     // var name = prompt('Enter your github username : ');
 
     //Checking validity of repo
+    if(!repo.startsWith("https://")){
+      console.log("\nPLEASE ENTER THE FULL REPOSITORY URL");
+      console.log("For example : https://github.com/N0Ls/CommitBot");
+      process.exit(1);
+    }
     var codeRepo = await connectionCode(repo);
     if(codeRepo == 200){
       console.log("le repo est bon");
@@ -89,7 +94,7 @@ async function responseCode() {
         //Commit
         var { stdout, stderr } = await exec("echo " + commit + " > gitfolder/"+repoName+"/commit.md");
         var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git add commit.md");
-        var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git commit -m 'Commit msg "+ i+ "'");
+        var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git commit -m 'Commit "+ i+ " made by N0Ls commit bot'");
         console.log("Commit " + i);
       }
       //Final push
@@ -97,4 +102,4 @@ async function responseCode() {
     }
   }
 }
-responseCode();
+commitBot();
