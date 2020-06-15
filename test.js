@@ -59,21 +59,49 @@ async function responseCode() {
       console.log("le repo est bon");
       if (fs.existsSync("gitfolder")) {
           console.log("folder found");
-          const { stdout, stderr } = await exec("cd gitfolder");
-          console.log('stdout:', stdout);
-          console.error('stderr:', stderr);
+          const { stdout, stderr } = await exec("cd gitfolder && rm -rf *");
       }
       else{
           console.log("Folder not found");
           console.log("Creating folder");
-          const { stdout, stderr } = await exec("mkdir gitfolder");
-          console.log('stdout:', stdout);
-          console.error('stderr:', stderr);
+          var { stdout, stderr } = await exec("mkdir gitfolder");
 
-          [ stdout, stderr ] = await exec("cd gitfolder");
-          console.log('stdout:', stdout);
-          console.error('stderr:', stderr);
+          var { stdout, stderr }  = await exec("cd gitfolder && rm -rf *");
       }
+
+      //var { stdout, stderr } = await exec("rm -rf .git>temp.speedx.xxxxx");
+      var { stdout, stderr } = await exec("cd gitfolder && git clone "+repo);
+      console.log("Repo Téléchargé");
+      var parts = repo.split('/');
+      var repoName = parts[parts.length - 1];
+      console.log(repoName);
+
+      //var { stdout, stderr } = await exec('mv -f gitfolder/'+repoName+'/*   gitfolder >>temp.speedx.xxxxx');
+		  //var { stdout, stderr } = await exec('mv -f gitfolder/'+repoName+'/.??* gitfolder>>temp.speedx.xxxxx');
+      //var { stdout, stderr } = await exec("cd gitfolder && git remote add origin "+repo);
+      // var { stdout, stderr } = await exec('cd gitfolder/'+repoName+' git config user.name \"'+name+'\"');
+      // var { stdout, stderr } = await exec('cd gitfolder/'+repoName+' git config user.email \"'+mail+'\"');
+
+      for (var i = 0; i < Number(nbCommits); i++) {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var ms = today.getMilliseconds();
+        today = mm + '/' + dd + '/' + yyyy + ' ' + h + ' h ' + m + ' ' + ms;
+
+        var commit="Commit: Update commits @ "+ today;
+
+        var { stdout, stderr } = await exec("echo " + commit + " > gitfolder/"+repoName+"/commit.md");
+
+        var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git add commit.md");
+        var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git commit -m 'Commit msg "+ i+ "'");
+        console.log(stderr);
+        console.log("Commit " + i);
+      }
+      var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git push origin master");
     }
   }
 }
