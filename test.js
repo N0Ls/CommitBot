@@ -19,7 +19,6 @@ function connectionCode(url) {
 function askCommitNumber(){
   var nbCommits;
   nbCommits = prompt('Enter the number of commits you want (>= 2): ');
-  console.log(Number(nbCommits));
   return nbCommits;
 }
 
@@ -32,7 +31,6 @@ async function commitBot() {
   /* Checking internet status */
   url='https://www.google.fr';
   var statusCodeTest = await connectionCode(url);
-  console.log(statusCodeTest);
   if(statusCodeTest == 200){
     nbCommits = askCommitNumber(); //getting number of commits
     //Checking number of commits
@@ -52,27 +50,26 @@ async function commitBot() {
     }
     var codeRepo = await connectionCode(repo);
     if(codeRepo == 200){
-      console.log("le repo est bon");
+      console.log("[+] Repository found");
       //Creating folder for the local repository clone
       if (fs.existsSync("gitfolder")) {
-          console.log("folder found");
+          console.log("[+] Folder found");
           var { stdout, stderr } = await exec("cd gitfolder && rm -rf *");
       }
       else{
-          console.log("Folder not found");
-          console.log("Creating folder");
+          console.log("[-] Folder not found");
+          console.log("[+] Creating folder");
           var { stdout, stderr } = await exec("mkdir gitfolder");
           var { stdout, stderr }  = await exec("cd gitfolder && rm -rf *");
       }
 
       //Cloning the remote repository
       var { stdout, stderr } = await exec("cd gitfolder && git clone "+repo);
-      console.log("Repo Téléchargé");
+      console.log("[+] Repository downloaded");
 
       //Getting the name of reposiory
       var parts = repo.split('/');
       var repoName = parts[parts.length - 1];
-      console.log(repoName);
 
       // var { stdout, stderr } = await exec('cd gitfolder/'+repoName+' git config user.name \"'+name+'\"');
       // var { stdout, stderr } = await exec('cd gitfolder/'+repoName+' git config user.email \"'+mail+'\"');
@@ -96,8 +93,8 @@ async function commitBot() {
         //Commit
         var { stdout, stderr } = await exec("echo " + commit + " > gitfolder/"+repoName+"/commit.md");
         var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git add commit.md");
-        var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git commit -m 'Commit "+ i+ " made by N0Ls commit bot'");
-        console.log("Commit " + i);
+        var { stdout, stderr } = await exec("cd gitfolder/"+repoName+" && git commit -m 'Commit "+ (i + 1) + " made by N0Ls commit bot'");
+        console.log("-- Commit " + (i + 1) + " --");
       }
 
       //Final Commit
