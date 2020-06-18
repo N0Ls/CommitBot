@@ -2,7 +2,7 @@
 Small project project that started as a joke.
 This bot automatically makes fake commits for you and increase your GitHub contributions number.
 
-img.shields.io/badges/powered%20by-Node.js-brightgreen
+https://img.shields.io/badge/powered%20by-Node.js-brightgreen
 
 This script is for educational purposes only.
 It was made to play around with Node.js.
