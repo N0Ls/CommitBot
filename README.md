@@ -18,3 +18,15 @@ If you don't trust that, leave the program after the commits are down and use :
 - A linux terminal
 - NPM
 - An internet connection
+
+# Installation 
+
+To use the bot, use the following commands  
+
+``` git clone https://github.com/N0Ls/CommitBot.git ```
+
+```cd CommitBot ```
+
+```node bot.js```
+
+Now you can follow the inputs of the script.
