@@ -16,7 +16,7 @@ If you don't trust that, leave the program after the commits are down and use :
 
 # Requirements
 - A linux terminal
-- NPM
+- npm
 - An internet connection
 
 # Installation 
@@ -25,7 +25,8 @@ To use the bot, use the following commands
 
 ``` git clone https://github.com/N0Ls/CommitBot.git ```
 
-```cd CommitBot ```
+```cd CommitBot ```  
+`npm install` *(on first use)*  
 
 ```node bot.js```
 
